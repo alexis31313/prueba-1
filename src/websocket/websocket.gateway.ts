@@ -43,9 +43,8 @@ export class WebsocketGateway
 
   /**
    * Se ejecuta cuando un cliente intenta conectarse.
-   * La autenticación real ocurre en el guard a nivel de mensaje,
-   * pero podemos hacer una verificación previa aquí para rechazar
-   * conexiones sin token antes de que envíen cualquier evento.
+   * Si no trae token se rechaza la conexión de inmediato.
+   * Si trae token válido, se une automáticamente al room "inventory".
    */
   handleConnection(client: Socket): void {
     const hasToken = !!client.handshake?.auth?.token;
@@ -58,16 +57,21 @@ export class WebsocketGateway
       return;
     }
 
-    this.logger.log(`Cliente conectado: ${client.id}`);
+    // Al conectarse, el cliente se une automáticamente al room "inventory"
+    client.join('inventory');
+    this.logger.log(
+      `Cliente conectado y unido a room "inventory": ${client.id}`,
+    );
   }
 
   handleDisconnect(client: Socket): void {
     this.logger.log(`Cliente desconectado: ${client.id}`);
+    // Socket.io elimina al cliente de todos sus rooms automáticamente al desconectarse,
+    // por lo que no recibirá más eventos hasta reconectarse y volver a unirse.
   }
 
   /**
    * Evento de ping protegido — verifica que el guard funciona.
-   * El guard valida el token y asigna client.data.user.
    */
   @UseGuards(WsAuthGuard)
   @SubscribeMessage('ping')
@@ -84,7 +88,6 @@ export class WebsocketGateway
 
   /**
    * Ejemplo de evento con payload tipado.
-   * Úsalo como base para tus eventos de negocio (stock, movimientos, etc.)
    */
   @UseGuards(WsAuthGuard)
   @SubscribeMessage('message')
@@ -107,10 +110,19 @@ export class WebsocketGateway
   }
 
   /**
-   * Utilidad para emitir eventos desde servicios externos.
-   * Inyecta el gateway en tu servicio y llama este método.
+   * Utilidad para emitir un evento a TODOS los clientes conectados.
+   * (Se mantiene por compatibilidad con usos previos.)
    */
   emitToAll(event: string, data: unknown): void {
     this.server.emit(event, data);
+  }
+
+  /**
+   * Emite un evento únicamente a los clientes que están en el room indicado.
+   * MovementsService usa este método para notificar a los clientes en "inventory".
+   */
+  emitToRoom(room: string, event: string, data: unknown): void {
+    this.server.to(room).emit(event, data);
+    this.logger.log(`Evento "${event}" emitido al room "${room}"`);
   }
 }
