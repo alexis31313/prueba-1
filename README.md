@@ -87,4 +87,3 @@ GET  /api/v1/auth/profile    → perfil (requiere Bearer token)
 ```
 
 En Swagger: login → copiar `access_token` → clic en 🔒 Authorize → pegar token.
-

@@ -1,4 +1,8 @@
-import {Injectable, NotFoundException, BadRequestException,} from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Movement, MovementType } from '../../modules/entities/movement.entity';
@@ -25,10 +29,11 @@ export class MovementsService {
     });
 
     if (!product) {
-      throw new NotFoundException(`Producto con ID ${dto.productId} no encontrado`);
+      throw new NotFoundException(
+        `Producto con ID ${dto.productId} no encontrado`,
+      );
     }
 
-  
     // Validar stock en salidas
     if (dto.type === MovementType.SALIDA) {
       if (product.stockActual < dto.quantity) {
