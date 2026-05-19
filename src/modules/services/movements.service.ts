@@ -5,6 +5,7 @@ import { Movement, MovementType } from '../../modules/entities/movement.entity';
 import { CreateMovementDto } from '../../modules/dto/create-movement.dto';
 import { Producto } from '../../modules/entities/producto.entity';
 import { User } from '../../modules/entities/user.entity';
+import { StockGateway } from '../../modules/gateways/stock.gateway';
 
 @Injectable()
 export class MovementsService {
@@ -14,7 +15,9 @@ export class MovementsService {
 
     @InjectRepository(Producto)
     private readonly productRepository: Repository<Producto>,
-  ) { }
+
+    private readonly stockGateway: StockGateway,
+  ) {}
 
   async create(dto: CreateMovementDto, user: User): Promise<Movement> {
     const product = await this.productRepository.findOne({
@@ -40,6 +43,10 @@ export class MovementsService {
 
     // Actualizar stock del producto
     await this.productRepository.save(product);
+
+    if (product.stockActual <= (product.stockMinimo ?? 0)) {
+      this.stockGateway.sendLowStockAlert(product);
+    }
 
     // Registrar movimiento
     const movement = this.movementRepository.create({

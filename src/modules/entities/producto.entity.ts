@@ -1,4 +1,10 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn,} from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Categoria } from '../../modules/entities/categoria.entity';
 
@@ -26,6 +32,13 @@ export class Producto {
   @ApiProperty({ example: 50, description: 'Stock actual del producto' })
   @Column({ name: 'stock_actual' })
   stockActual!: number;
+
+  @ApiProperty({
+    example: 10,
+    description: 'Stock mínimo antes de generar alerta',
+  })
+  @Column({ name: 'stock_minimo', type: 'int', default: 0 })
+  stockMinimo!: number;
 
   @ApiProperty({ type: () => Categoria, description: 'Categoría del producto' })
   @ManyToOne(() => Categoria, (categoria) => categoria.productos, {

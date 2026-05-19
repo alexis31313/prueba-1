@@ -1,4 +1,12 @@
-import {IsString, IsNotEmpty, IsNumber, IsPositive, IsOptional, MaxLength, Min,} from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  IsOptional,
+  MaxLength,
+  Min,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductoDto {
@@ -43,6 +51,16 @@ export class CreateProductoDto {
   @IsNumber({}, { message: 'El stock debe ser un número' })
   @Min(0, { message: 'El stock no puede ser negativo' })
   stockActual!: number;
+
+  @ApiProperty({
+    example: 10,
+    description: 'Stock mínimo para alertas',
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber({}, { message: 'El stock mínimo debe ser un número' })
+  @Min(0, { message: 'El stock mínimo no puede ser negativo' })
+  stockMinimo?: number;
 
   @ApiProperty({
     example: 1,
