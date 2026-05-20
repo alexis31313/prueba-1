@@ -7,7 +7,7 @@ import { AuthModule } from '../modules/providers/auth.module';
 import { CategoriaModule } from '../modules/providers/categoria.module';
 import { ProductoModule } from '../modules/providers/producto.module';
 import { MovementsModule } from '../modules/providers/movements.module';
-import { StockGatewayModule } from '../modules/providers/stock-gateway.module';
+import { WebsocketModule } from '../websocket/websocket.module';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { StockGatewayModule } from '../modules/providers/stock-gateway.module';
     CategoriaModule,
     ProductoModule,
     MovementsModule,
-    StockGatewayModule,
+    WebsocketModule,
   ],
   providers: [
     {

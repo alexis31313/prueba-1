@@ -4,9 +4,9 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 
 export interface RefreshJwtPayload {
-  sub: number; 
+  sub: number;
   email: string;
-  type: 'refresh'; 
+  type: 'refresh';
 }
 
 @Injectable()

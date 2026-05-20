@@ -1,6 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ClassSerializerInterceptor } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+} from '@nestjs/swagger';
 import { UsersService } from '../../modules/services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../../modules/dto/update-user.dto';
@@ -22,8 +38,14 @@ export class UsersController {
   @ApiOperation({ summary: 'Crear nuevo usuario (solo ADMIN)' })
   @ApiResponse({ status: 201, description: 'Usuario creado exitosamente' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  @ApiResponse({ status: 403, description: 'No autorizado — se requiere rol ADMIN' })
-  @ApiResponse({ status: 409, description: 'Ya existe un usuario con ese email' })
+  @ApiResponse({
+    status: 403,
+    description: 'No autorizado — se requiere rol ADMIN',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Ya existe un usuario con ese email',
+  })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -31,8 +53,13 @@ export class UsersController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.BODEGUERO)
-  @ApiOperation({ summary: 'Listar todos los usuarios activos (ADMIN y BODEGUERO)' })
-  @ApiResponse({ status: 200, description: 'Lista de usuarios obtenida exitosamente' })
+  @ApiOperation({
+    summary: 'Listar todos los usuarios activos (ADMIN y BODEGUERO)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de usuarios obtenida exitosamente',
+  })
   @ApiResponse({ status: 401, description: 'No autenticado' })
   @ApiResponse({ status: 403, description: 'No autorizado' })
   findAll() {
@@ -59,7 +86,10 @@ export class UsersController {
   @ApiParam({ name: 'id', type: Number, description: 'ID del usuario' })
   @ApiResponse({ status: 200, description: 'Usuario actualizado exitosamente' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  @ApiResponse({ status: 403, description: 'No autorizado — se requiere rol ADMIN' })
+  @ApiResponse({
+    status: 403,
+    description: 'No autorizado — se requiere rol ADMIN',
+  })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
@@ -72,7 +102,10 @@ export class UsersController {
   @ApiParam({ name: 'id', type: Number, description: 'ID del usuario' })
   @ApiResponse({ status: 200, description: 'Usuario eliminado exitosamente' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  @ApiResponse({ status: 403, description: 'No autorizado — se requiere rol ADMIN' })
+  @ApiResponse({
+    status: 403,
+    description: 'No autorizado — se requiere rol ADMIN',
+  })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

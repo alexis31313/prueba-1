@@ -1,5 +1,20 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe, UseGuards, Request } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiParam,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { MovementsService } from '../../modules/services/movements.service';
 import { CreateMovementDto } from '../../modules/dto/create-movement.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
@@ -16,11 +31,22 @@ export class MovementsController {
 
   @Post()
   @Roles(Role.BODEGUERO)
-  @ApiOperation({ summary: 'Registrar entrada o salida de inventario (solo BODEGUERO)' })
-  @ApiResponse({ status: 201, description: 'Movimiento registrado exitosamente' })
-  @ApiResponse({ status: 400, description: 'Stock insuficiente para realizar la salida' })
+  @ApiOperation({
+    summary: 'Registrar entrada o salida de inventario (solo BODEGUERO)',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Movimiento registrado exitosamente',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Stock insuficiente para realizar la salida',
+  })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  @ApiResponse({ status: 403, description: 'No autorizado — se requiere rol BODEGUERO' })
+  @ApiResponse({
+    status: 403,
+    description: 'No autorizado — se requiere rol BODEGUERO',
+  })
   @ApiResponse({ status: 404, description: 'Producto no encontrado' })
   create(@Body() dto: CreateMovementDto, @Request() req) {
     return this.movementsService.create(dto, req.user);
@@ -29,7 +55,10 @@ export class MovementsController {
   @Get()
   @Roles(Role.ADMIN, Role.BODEGUERO)
   @ApiOperation({ summary: 'Listar todos los movimientos' })
-  @ApiResponse({ status: 200, description: 'Lista de movimientos obtenida exitosamente' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de movimientos obtenida exitosamente',
+  })
   @ApiResponse({ status: 401, description: 'No autenticado' })
   findAll() {
     return this.movementsService.findAll();
@@ -50,7 +79,10 @@ export class MovementsController {
   @Roles(Role.ADMIN, Role.BODEGUERO, Role.CONSULTOR)
   @ApiOperation({ summary: 'Listar movimientos por producto' })
   @ApiParam({ name: 'productId', type: Number })
-  @ApiResponse({ status: 200, description: 'Movimientos del producto obtenidos exitosamente' })
+  @ApiResponse({
+    status: 200,
+    description: 'Movimientos del producto obtenidos exitosamente',
+  })
   @ApiResponse({ status: 401, description: 'No autenticado' })
   @ApiResponse({ status: 404, description: 'Producto no encontrado' })
   findByProduct(@Param('productId', ParseIntPipe) productId: number) {

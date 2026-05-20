@@ -1,5 +1,19 @@
-import {Controller, Get, Post, Param, Body, ParseIntPipe, UseGuards,} from '@nestjs/common';
-import {ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam,} from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CategoriaService } from '../../modules/services/categoria.service';
 import { CreateCategoriaDto } from '../../modules/dto/create-categoria.dto';

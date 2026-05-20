@@ -4,10 +4,11 @@ import { MovementsService } from '../../modules/services/movements.service';
 import { MovementsController } from '../../modules/controllers/movements.controller';
 import { Movement } from '../../modules/entities/movement.entity';
 import { Producto } from '../../modules/entities/producto.entity';
-import { StockGateway } from '../../modules/gateways/stock.gateway';
+import { WebsocketModule } from '../../websocket/websocket.module';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([Movement, Producto])],
+  imports: [TypeOrmModule.forFeature([Movement, Producto]), WebsocketModule],
   controllers: [MovementsController],
-  providers: [MovementsService, StockGateway],
+  providers: [MovementsService],
 })
 export class MovementsModule {}

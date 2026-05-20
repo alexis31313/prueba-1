@@ -9,7 +9,7 @@ import { Producto } from '../../modules/entities/producto.entity';
 import { CreateProductoDto } from '../../modules/dto/create-producto.dto';
 import { UpdateProductoDto } from '../../modules/dto/update-producto.dto';
 import { Categoria } from '../../modules/entities/categoria.entity';
-import { StockGateway } from '../gateways/stock.gateway';
+import { WebsocketGateway } from '../../websocket/websocket.gateway';
 
 @Injectable()
 export class ProductoService {
@@ -18,7 +18,7 @@ export class ProductoService {
     private readonly productoRepository: Repository<Producto>,
     @InjectRepository(Categoria)
     private readonly categoriaRepository: Repository<Categoria>,
-    private readonly stockGateway: StockGateway,
+    private readonly stockGateway: WebsocketGateway,
   ) {}
 
   async create(createProductoDto: CreateProductoDto): Promise<Producto> {
@@ -75,7 +75,6 @@ export class ProductoService {
     const producto = await this.findOne(id);
 
     if (updateProductoDto.categoriaId) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       const categoria = await this.categoriaRepository.findOne({
         where: { id: updateProductoDto.categoriaId },
       });
@@ -90,7 +89,6 @@ export class ProductoService {
     }
 
     if (updateProductoDto.nombre) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       const existe = await this.productoRepository.findOne({
         where: { nombre: updateProductoDto.nombre },
       });
@@ -103,7 +101,7 @@ export class ProductoService {
     }
 
     Object.assign(producto, updateProductoDto);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
     const updatedProducto = await this.productoRepository.save(producto);
     this.stockGateway.emitProductUpdated(updatedProducto);
     return updatedProducto;
@@ -111,7 +109,7 @@ export class ProductoService {
 
   async remove(id: number): Promise<void> {
     const producto = await this.findOne(id);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
     await this.productoRepository.remove(producto);
     this.stockGateway.emitProductDeleted(id);
   }

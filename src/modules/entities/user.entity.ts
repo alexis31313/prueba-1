@@ -1,8 +1,14 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany,} from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm';
 import { Role } from '../../common/enums/role.enum';
 import { Exclude } from 'class-transformer';
 import { Movement } from '../../modules/entities/movement.entity';
-
 
 @Entity('users')
 export class User {
@@ -26,7 +32,7 @@ export class User {
   isActive!: boolean;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  @Exclude() 
+  @Exclude()
   refreshToken!: string | null;
 
   @CreateDateColumn()
