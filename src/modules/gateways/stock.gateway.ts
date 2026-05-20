@@ -49,7 +49,7 @@ export class StockGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   emitProductUpdated(producto: Producto): void {
-    this.server.to('inventory').emit('product:updated', producto);
+    this.server.to(`product:${producto.id}`).emit('product:updated', producto);
   }
 
   emitProductDeleted(id: number): void {
