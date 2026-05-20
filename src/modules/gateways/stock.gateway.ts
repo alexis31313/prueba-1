@@ -15,7 +15,7 @@ export class StockGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server!: Server;
 
   handleConnection(client: Socket): void {
-    // Connection established
+    client.join('inventory');
   }
 
   handleDisconnect(client: Socket): void {
@@ -42,5 +42,17 @@ export class StockGateway implements OnGatewayConnection, OnGatewayDisconnect {
       categoria: product.categoria?.nombre,
       mensaje: `Stock bajo para ${product.nombre}`,
     });
+  }
+
+  emitProductCreated(producto: Producto): void {
+    this.server.to('inventory').emit('product:created', producto);
+  }
+
+  emitProductUpdated(producto: Producto): void {
+    this.server.to('inventory').emit('product:updated', producto);
+  }
+
+  emitProductDeleted(id: number): void {
+    this.server.to('inventory').emit('product:deleted', { id });
   }
 }
