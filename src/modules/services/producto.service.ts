@@ -9,6 +9,7 @@ import { Producto } from '../../modules/entities/producto.entity';
 import { CreateProductoDto } from '../../modules/dto/create-producto.dto';
 import { UpdateProductoDto } from '../../modules/dto/update-producto.dto';
 import { Categoria } from '../../modules/entities/categoria.entity';
+import { StockGateway } from '../gateways/stock.gateway';
 
 @Injectable()
 export class ProductoService {
@@ -17,6 +18,7 @@ export class ProductoService {
     private readonly productoRepository: Repository<Producto>,
     @InjectRepository(Categoria)
     private readonly categoriaRepository: Repository<Categoria>,
+    private readonly stockGateway: StockGateway,
   ) {}
 
   async create(createProductoDto: CreateProductoDto): Promise<Producto> {
@@ -45,7 +47,9 @@ export class ProductoService {
       categoria,
       stockMinimo: createProductoDto.stockMinimo ?? 0,
     });
-    return await this.productoRepository.save(producto);
+    const savedProducto = await this.productoRepository.save(producto);
+    this.stockGateway.emitProductCreated(savedProducto);
+    return savedProducto;
   }
 
   async findAll(): Promise<Producto[]> {
@@ -100,12 +104,15 @@ export class ProductoService {
 
     Object.assign(producto, updateProductoDto);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    return await this.productoRepository.save(producto);
+    const updatedProducto = await this.productoRepository.save(producto);
+    this.stockGateway.emitProductUpdated(updatedProducto);
+    return updatedProducto;
   }
 
   async remove(id: number): Promise<void> {
     const producto = await this.findOne(id);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await this.productoRepository.remove(producto);
+    this.stockGateway.emitProductDeleted(id);
   }
 }

@@ -7,6 +7,7 @@ import { AuthModule } from '../modules/providers/auth.module';
 import { CategoriaModule } from '../modules/providers/categoria.module';
 import { ProductoModule } from '../modules/providers/producto.module';
 import { MovementsModule } from '../modules/providers/movements.module';
+import { StockGatewayModule } from '../modules/providers/stock-gateway.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MovementsModule } from '../modules/providers/movements.module';
     CategoriaModule,
     ProductoModule,
     MovementsModule,
+    StockGatewayModule,
   ],
   providers: [
     {
