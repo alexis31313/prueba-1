@@ -1,4 +1,8 @@
-import {Injectable, NotFoundException, ConflictException,} from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Producto } from '../../modules/entities/producto.entity';
@@ -39,6 +43,7 @@ export class ProductoService {
     const producto = this.productoRepository.create({
       ...createProductoDto,
       categoria,
+      stockMinimo: createProductoDto.stockMinimo ?? 0,
     });
     return await this.productoRepository.save(producto);
   }
