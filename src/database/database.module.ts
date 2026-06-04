@@ -19,11 +19,11 @@ import * as path from 'path';
         entities: ['dist/**/*.entity.js'],
         synchronize: config.get('NODE_ENV') !== 'production',
         logging: config.get('NODE_ENV') === 'production',
-        ssl: config.get<string>('DB_CA_CERT')
+        const dbCaCert = config.get<string>('DB_CA_CERT');
+
+        ssl: dbCaCert
           ? {
-              ca: fs.readFileSync(
-                path.resolve(__dirname, '../../', config.get<string>('DB_CA_CERT')),
-              ),
+              ca: fs.readFileSync(path.resolve(__dirname, '../../', dbCaCert)),
             }
           : undefined,
       }),
