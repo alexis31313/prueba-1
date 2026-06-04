@@ -10,9 +10,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useWebSocketAdapter(new IoAdapter(app));
 
-  // ── CORS para el frontend de pruebas ─────────────────────────
+  // ── CORS ──────────────────────────────────────────────────────
+  const corsOrigins = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+    : ['http://localhost:5173', 'http://localhost:8080', 'http://localhost:8081'];
+
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:8080', 'http://localhost:8081'],
+    origin: corsOrigins,
     credentials: true,
   });
 
