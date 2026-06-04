@@ -44,7 +44,7 @@ async function bootstrap() {
 
   // ── Swagger ───────────────────────────────────────────────────
   const config = new DocumentBuilder()
-    .setTitle('StockMaster API')
+    .setTitle('Leyder Figueroa')
     .setDescription('Sistema de Gestión de Inventarios — Caso Práctico 3')
     .setVersion('1.0')
     .addBearerAuth(

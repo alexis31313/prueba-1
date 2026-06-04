@@ -31,4 +31,4 @@ services:
       - key: CORS_ORIGIN
         sync: false
       - key: NODE_VERSION
-        value: 22
+        value: 20
